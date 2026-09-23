@@ -1,15 +1,14 @@
 # Quantitative Systematic Trading Architecture
 
 ## Overview
-This repository contains the performance analytics and architectural documentation for a proprietary multi-asset trading engine. The core execution logic is built in C# (NinjaTrader 8), utilizing quantitative regime-switching models and statistical variance bands to trade highly liquid U.S. index futures (MES, MNQ). 
+This repository contains the performance analytics and architectural documentation for a proprietary multi-asset trading engine. The core execution logic is built in C# (NinjaTrader 8), utilizing quantitative regime-switching models and statistical variance bands to trade highly liquid global futures (MNQ, MES, MGC). 
 
-Due to IP protection, raw execution source code is kept private. This repository showcases the mathematical architecture, risk-management protocols, and Python-based performance tearsheets (Pandas/Matplotlib) used to validate the models.
+Due to IP protection, raw execution source code is kept private. This repository showcases the mathematical architecture, risk-management protocols, and Python-based performance tearsheets (Pandas/Matplotlib) used to validate the models out-of-sample.
 
 ## Core Strategy Engines
 
-* **Regime-Based Strategy Engine:** Utilizes a probabilistic regime detection model (approximating a Hidden Markov Model) to classify market states into Trend, Range, Liquidity Sweep, or Volatility Expansion. 
-* **Statistical Mean Reversion:** Fades extreme moves during calm/range regimes by identifying when price deviates >1 standard deviation from a rolling mean.
-* **Order Flow Vanguard:** Integrates Volume Weighted Average Price (VWAP) alignment and Cumulative Delta divergences to identify institutional absorption and liquidity sweeps.
+* **High-Beta Volatility Engine (Robust Trend-Pullback):** Designed to exploit intraday volatility expansions on the Nasdaq-100. It utilizes an adaptive SMA/ADX regime filter to confirm momentum continuation and relies on delayed volatility trailing stops to capture massive right-tail outliers.
+* **Asymmetric Statistical Mean Reversion (Quant Regime Scalper):** A volatility-gated statistical arbitrage model deployed on the S&P 500 and Gold. It mathematically approximates market regimes via an ATR compression ratio (`fastAtr / regimeAtr`), fading extreme Z-Score deviations exclusively during mean-reverting macro states.
 
 ## Risk Management Architecture
 The system employs strict, institutional-grade risk parameters:
@@ -27,7 +26,26 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 
 ## Verified Performance Analytics (Out-of-Sample)
 
-### High-Beta Nasdaq Volatility Engine
+### Master Cross-Asset Portfolio (MNQ, MES, MGC)
+
+**Architecture:** Multi-Asset Regime & Variance System (Combined Engine)  
+**Validation:** Rolling Walk-Forward Optimization (Stitched Out-of-Sample)
+
+| Metric | Out-of-Sample Result |
+| :--- | :--- |
+| **Total Stitched PnL** | **$3,956.00** |
+| **Portfolio Profit Factor** | **1.26** |
+| **Estimated Sharpe Ratio** | **2.68** |
+| **Win Rate** | **57.58%** |
+| **Max Peak-to-Trough Drawdown** | **-$1,546.80** |
+| **Total Out-of-Sample Executions** | **198 trades** |
+| **Unique Assets Traded** | **3 (MNQ, MES, MGC)** |
+
+![Master Portfolio Equity Curve](assets/master_portfolio_oos.png)
+
+---
+
+### Strategy 1: High-Beta Nasdaq Volatility Engine
 
 **Architecture:** Robust Trend-Pullback Model (SMA / ADX Regime Filter)  
 **Instrument:** Micro E-mini Nasdaq-100 (MNQ) — 3-Minute Timeframe  
@@ -44,3 +62,22 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 | **Total Out-of-Sample Executions** | **285 trades** |
 
 ![MNQ Volatility Engine OOS](assets/mnq_volatility(robust)_oos.png)
+
+---
+
+### Strategy 2: Asymmetric Statistical Mean Reversion
+
+**Architecture:** Volatility-Gated Statistical Arbitrage (Z-Score Variance / ATR Regime Filter)  
+**Instrument:** Micro E-mini S&P 500 (MES) — 5-Minute Timeframe  
+**Validation:** Marathon Walk-Forward Optimization (120-day train / 30-day out-of-sample test)
+
+| Metric | Out-of-Sample Result |
+| :--- | :--- |
+| **Total Stitched PnL** | **$364.20** |
+| **Profit Factor** | **1.12** |
+| **Trade Expectancy (Avg Trade)** | **$8.88** |
+| **Win Rate** | **58.54%** |
+| **Max Peak-to-Trough Drawdown** | **-$421.32** |
+| **Total Out-of-Sample Executions** | **41 trades** |
+
+![MES Mean Reversion OOS](assets/mes_reversion_oos.png)
