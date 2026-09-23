@@ -8,7 +8,7 @@ Due to IP protection, raw execution source code is kept private. This repository
 ## Core Strategy Engines
 
 * **High-Beta Volatility Engine (Robust Trend-Pullback):** Designed to exploit intraday volatility expansions on the Nasdaq-100. It utilizes an adaptive SMA/ADX regime filter to confirm momentum continuation and relies on delayed volatility trailing stops to capture massive right-tail outliers.
-* **Asymmetric Statistical Mean Reversion (Quant Regime Scalper):** A volatility-gated statistical arbitrage model deployed on the S&P 500 and Gold. It mathematically approximates market regimes via an ATR compression ratio (`fastAtr / regimeAtr`), fading extreme Z-Score deviations exclusively during mean-reverting macro states.
+* **Asymmetric Statistical Mean Reversion (Quant Regime Scalper):** A volatility-gated statistical arbitrage model deployed across a multi-asset portfolio (S&P 500, Nasdaq, and Gold). It mathematically approximates market regimes via an ATR compression ratio (`fastAtr / regimeAtr`), fading extreme Z-Score deviations exclusively during mean-reverting macro states.
 
 ## Risk Management Architecture
 The system employs strict, institutional-grade risk parameters:
@@ -26,9 +26,10 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 
 ## Verified Performance Analytics (Out-of-Sample)
 
-### Master Cross-Asset Portfolio (MNQ, MES, MGC)
+### 1. Master Cross-Asset Portfolio (Asymmetric Mean Reversion)
+*This tearsheet aggregates the out-of-sample executions of the Asymmetric Mean Reversion engine applied across three distinct asset classes, proving the model's structural edge is not over-optimized to a single market.*
 
-**Architecture:** Multi-Asset Regime & Variance System (Combined Engine)  
+**Architecture:** Volatility-Gated Statistical Arbitrage (Z-Score Variance / ATR Regime Filter)  
 **Validation:** Rolling Walk-Forward Optimization (Stitched Out-of-Sample)
 
 | Metric | Out-of-Sample Result |
@@ -45,7 +46,8 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 
 ---
 
-### High-Beta Nasdaq Volatility Engine
+### 2. Standalone Anchor: High-Beta Nasdaq Volatility Engine 
+*This engine acts as the portfolio's offensive anchor, capturing massive right-tail outliers during aggressive Nasdaq momentum regimes.*
 
 **Architecture:** Robust Trend-Pullback Model (SMA / ADX Regime Filter)  
 **Instrument:** Micro E-mini Nasdaq-100 (MNQ) — 3-Minute Timeframe  
