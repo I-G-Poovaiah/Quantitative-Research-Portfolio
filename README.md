@@ -41,11 +41,11 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 | **Total Out-of-Sample Executions** | **198 trades** |
 | **Unique Assets Traded** | **3 (MNQ, MES, MGC)** |
 
-![Master Portfolio Equity Curve](assets/master_portfolio_oos.png)
+![Master Portfolio Equity Curve](assets/master_portfolio_oos(quantregimescalper).png)
 
 ---
 
-### Strategy 1: High-Beta Nasdaq Volatility Engine
+### High-Beta Nasdaq Volatility Engine
 
 **Architecture:** Robust Trend-Pullback Model (SMA / ADX Regime Filter)  
 **Instrument:** Micro E-mini Nasdaq-100 (MNQ) — 3-Minute Timeframe  
@@ -62,22 +62,3 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 | **Total Out-of-Sample Executions** | **285 trades** |
 
 ![MNQ Volatility Engine OOS](assets/mnq_volatility(robust)_oos.png)
-
----
-
-### Strategy 2: Asymmetric Statistical Mean Reversion
-
-**Architecture:** Volatility-Gated Statistical Arbitrage (Z-Score Variance / ATR Regime Filter)  
-**Instrument:** Micro E-mini S&P 500 (MES) — 5-Minute Timeframe  
-**Validation:** Marathon Walk-Forward Optimization (120-day train / 30-day out-of-sample test)
-
-| Metric | Out-of-Sample Result |
-| :--- | :--- |
-| **Total Stitched PnL** | **$364.20** |
-| **Profit Factor** | **1.12** |
-| **Trade Expectancy (Avg Trade)** | **$8.88** |
-| **Win Rate** | **58.54%** |
-| **Max Peak-to-Trough Drawdown** | **-$421.32** |
-| **Total Out-of-Sample Executions** | **41 trades** |
-
-![MES Mean Reversion OOS](assets/mes_reversion_oos.png)
