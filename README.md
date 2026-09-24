@@ -10,6 +10,7 @@ Due to IP protection, raw execution source code is kept private. This repository
 * **High-Beta Volatility Engine (Robust Trend-Pullback):** Designed to exploit intraday volatility expansions on the Nasdaq-100. It utilizes an adaptive SMA/ADX regime filter to confirm momentum continuation and relies on delayed volatility trailing stops to capture massive right-tail outliers.
 * **Asymmetric Statistical Mean Reversion (Quant Regime Scalper):** A volatility-gated statistical arbitrage model deployed across a multi-asset portfolio (S&P 500, Nasdaq, and Gold). It mathematically approximates market regimes via an ATR compression ratio (`fastAtr / regimeAtr`), fading extreme Z-Score deviations exclusively during mean-reverting macro states.
 * **Universal Expansion Engine:** A pure asymmetric breakout model capturing transitions from low to high-volatility regimes. It pairs ATR contraction patterns with a one-way High-Water Mark trailing stop to ride massive momentum outliers.
+* **Dynamic Risk Expansion Engine:** A heavily shielded volatility breakout model featuring a hard-coded daily session dollar-drawdown limit. It mathematically severs left-tail risk, allowing an asymmetric momentum edge to compound safely despite a low win rate.
 
 ## Risk Management Architecture
 The system employs strict, institutional-grade risk parameters:
@@ -86,3 +87,24 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 | **Total Out-of-Sample Executions** | **860 trades** |
 
 ![Strategy 4 Expansion OOS](assets/strategy4_expansion_oos.png)
+
+---
+
+### 4. Standalone Anchor: Dynamic Risk Expansion Engine
+*This engine employs a hard-coded daily drawdown threshold to sever left-tail risk, allowing the asymmetrical momentum model to achieve an institutional Sharpe Ratio despite a 23% win rate.*
+
+**Architecture:** Volatility Expansion Breakout (Dynamic Session PnL Routing / Hard-Stop Filter)  
+**Instrument:** Micro E-mini Nasdaq-100 (MNQ) — 1000 Volume Timeframe  
+**Validation:** Rolling Walk-Forward Optimization (60-day train / 30-day out-of-sample test)
+
+| Metric | Out-of-Sample Result |
+| :--- | :--- |
+| **Total Net Profit** | **$4,681.30** |
+| **Profit Factor** | **1.35** |
+| **Estimated Sharpe Ratio** | **2.15** |
+| **Trade Expectancy (Avg Trade)** | **$12.72** |
+| **Win Rate** | **23.91%** |
+| **Max Peak-to-Trough Drawdown** | **-$1,396.10** |
+| **Total Out-of-Sample Executions** | **368 trades** |
+
+![Strategy 5 Dynamic OOS](assets/strategy5_dynamic_oos.png)
