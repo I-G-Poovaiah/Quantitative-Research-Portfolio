@@ -3,7 +3,7 @@
 ## Overview
 This repository contains the performance analytics and architectural documentation for a proprietary multi-asset trading engine. The core execution logic is built in C# (NinjaTrader 8), utilizing quantitative regime-switching models and statistical variance bands to trade highly liquid global futures (MNQ, MES, MGC). 
 
-Due to IP protection, raw execution source code is kept private. This repository showcases the mathematical architecture, risk-management protocols, and Python-based performance tearsheets (Pandas/Matplotlib) used to validate the models out-of-sample.
+Due to IP protection, raw execution source code is kept private. This repository showcases the mathematical architecture, risk-management protocols, and Python-based performance tearsheets (Pandas/Matplotlib/Seaborn) used to validate the models out-of-sample.
 
 ## Core Strategy Engines
 
@@ -20,16 +20,37 @@ The system employs strict, institutional-grade risk parameters:
 
 ## Analytics Pipeline
 The included Python notebooks ingest raw execution logs (CSV) to calculate institutional metrics:
-* Sharpe & Sortino Ratios
+* Sharpe, Sortino, & Calmar Ratios
 * Maximum Peak-to-Trough Drawdown
-* Expectancy and Profit Factors
+* Monthly Returns Heatmaps & Daily Return Distributions
 
 ---
 
 ## Verified Performance Analytics (Out-of-Sample)
 
-### 1. Master Cross-Asset Portfolio (Asymmetric Mean Reversion)
-*This tearsheet aggregates the out-of-sample executions of the Asymmetric Mean Reversion engine applied across three distinct asset classes, proving the model's structural edge is not over-optimized to a single market.*
+### 1. Master Multi-Engine Portfolio (Institutional Tearsheet)
+*This tearsheet aggregates the out-of-sample executions of all four independent execution engines (Mean Reversion, Trend Pullback, and Dynamic Breakout) across three distinct asset classes (MNQ, MES, MGC).*
+
+**Architecture:** Cross-Asset Regime Switching & Variance Arbitrage  
+**Validation:** Rolling Walk-Forward Optimization (Stitched Out-of-Sample)
+
+| Metric | Out-of-Sample Result |
+| :--- | :--- |
+| **Total Stitched PnL** | **$20,108.90** |
+| **Portfolio Profit Factor** | **1.24** |
+| **Annualized Sharpe Ratio** | **2.58** |
+| **Annualized Sortino Ratio** | **6.03** |
+| **Calmar Ratio** | **7.31** |
+| **Win Rate** | **29.21%** |
+| **Max Peak-to-Trough Drawdown** | **-$3,610.50** |
+| **Total Out-of-Sample Executions** | **1,732 trades** |
+
+![Institutional Portfolio Tearsheet](assets/institutional_portfolio_tearsheet.png)
+
+---
+
+### 2. Standalone Anchor: Asymmetric Statistical Mean Reversion
+*This engine acts as the portfolio's baseline stabilizer, mathematically deployed across three distinct asset classes to prove the model's structural edge is not over-optimized to a single market.*
 
 **Architecture:** Volatility-Gated Statistical Arbitrage (Z-Score Variance / ATR Regime Filter)  
 **Validation:** Rolling Walk-Forward Optimization (Stitched Out-of-Sample)
@@ -37,7 +58,7 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 | Metric | Out-of-Sample Result |
 | :--- | :--- |
 | **Total Stitched PnL** | **$3,956.00** |
-| **Portfolio Profit Factor** | **1.26** |
+| **Profit Factor** | **1.26** |
 | **Estimated Sharpe Ratio** | **2.68** |
 | **Win Rate** | **57.58%** |
 | **Max Peak-to-Trough Drawdown** | **-$1,546.80** |
@@ -48,7 +69,7 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 
 ---
 
-### 2. Standalone Anchor: High-Beta Nasdaq Volatility Engine 
+### 3. Standalone Anchor: High-Beta Nasdaq Volatility Engine 
 *This engine acts as the portfolio's offensive anchor, capturing massive right-tail outliers during aggressive Nasdaq momentum regimes.*
 
 **Architecture:** Robust Trend-Pullback Model (SMA / ADX Regime Filter)  
@@ -69,7 +90,7 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 
 ---
 
-### 3. Standalone Anchor: Universal Expansion Engine
+### 4. Standalone Anchor: Universal Expansion Engine
 *This model is engineered to survive low-win-rate environments by heavily restricting losses and letting ATR-driven trailing stops maximize right-tail momentum spikes.*
 
 **Architecture:** Volatility Expansion Breakout (Dynamic ATR Trailing Stop / High-Water Mark)  
@@ -90,7 +111,7 @@ The included Python notebooks ingest raw execution logs (CSV) to calculate insti
 
 ---
 
-### 4. Standalone Anchor: Dynamic Risk Expansion Engine
+### 5. Standalone Anchor: Dynamic Risk Expansion Engine
 *This engine employs a hard-coded daily drawdown threshold to sever left-tail risk, allowing the asymmetrical momentum model to achieve an institutional Sharpe Ratio despite a 23% win rate.*
 
 **Architecture:** Volatility Expansion Breakout (Dynamic Session PnL Routing / Hard-Stop Filter)  
